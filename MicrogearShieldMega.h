@@ -1,75 +1,71 @@
+/***********************************************************************
+*
+*	This file suppose the purposes of setup microgear
+*		<1>Support functions in Microgear Task
+*			<1.1>Set config key secret alias token token_secret {Type II}
+*			<1.2>Connect from Netpie {Type I}
+*			<1.3>Disconnect from Netpie {Type I}		
+*			<1.3>Set alias name	{Type II}
+*			<1.4>Publish data {Type II}
+*			<1.5>Subscribe topic {Type II}
+*			<1.6>Unscribe topic {Type II}
+*			<1.7>loop
+*			<1.8>Config echo mode {Type II}
+*			<1.9>Config push mode {Type II}
+*
+*************************************************************************/
 
-#define MicrogearShieldMega_h
-#include "RingBuf.h"
-#include "Arduino.h"	
-#include "Print.h"
-#include "Client.h"
-#include "IPAddress.h"
-using namespace std;
+#ifndef MicrogearShieldUno_h
+	#define MicrogearShieldUno_h
+
+	#include "WiFiclass.h"
+	#include "RingBuf.h"
+	#include "Wificlient.h"
+	#include "Serial.h"
+
+	#include "Arduino.h"
+	#include "Print.h"	
+	#include "Client.h"
+	#include "IPAddress.h"
+	
+	using namespace std;
+	
+	extern WiFiClass WiFi;
+	
 
 
-class WiFiClient: public Client {
+class Microgear{
+
 public:
-  WiFiClient();
-  struct RingBuf* client1;
-  struct RingBuf* client2;
-
-
-  uint8_t status();
-  virtual int connect(IPAddress ip, uint16_t port);
-  virtual int connect(const char *host, uint16_t port);
-  virtual size_t write(uint8_t b);
-  virtual size_t write(const uint8_t *buf, size_t size);
+   Microgear();
   
-  void transmission ();
-  void sendrequest();
-  void getdatafrommyserial();
-  virtual int available();
-  virtual int read();
-  virtual int read(uint8_t *buf, size_t size);
-  virtual int peek();
-  virtual void flush();
-  virtual void stop();
-  virtual uint8_t connected();
-  virtual operator bool();
+   void init(char *appid, char *key, char *secret ,char *alias, char *token, char *tokensecret);		//Type II
+   void connect();	
+   bool status();																					//Type I
+   bool disconnect();																					//Type I			
+   void setalias(char *alias);																			//Type II	
+   void publish(char *topic,char *data);																//Type II
+   void chat(char *appid,char *data);																	//Type II
+   void subscribe(char *topic);																			//Type I			
+   void unsubscribe(char *topic);																		//Type II
+   static void loop();
+   void echomode(int mode);
+   void pushmode(int mode);
+   void writefeed(char *appid, char *feeddata);
+   void writefeed(char *appid, char *feeddata, char *apikey);
 
+   int available();
+   void read(MgStruct *mg);
 
-
-  
 private:
-  static int countindex;
-  int index;
-  char myserialdata[30];
-  char ip[16];
-  char state;
-  unsigned long time;
- 
-  
-
-
-  uint8_t getFirstSocket();
+	  struct RingBuf* microgear_buf;
+	  static int countindex;
+	  int index;
+	  char myserialdata[30];
+	  char ip[16];
+	  char state;
+	  unsigned long time;
+	  uint8_t getFirstSocket();
 };
 
-class Serialmanual{
-public:
-  static void readserial(char *buf) ;
-};
-
-
-class WiFiClass{
-public:
-   void begin(const char *ssid, const char *password);
-   bool status();
-   char* localIP();
-private:
-   char buffer[30];
-   char state[5];
-   char ip[20];
-
-
-
-};
-
-extern WiFiClass WiFi;
-
-
+#endif
