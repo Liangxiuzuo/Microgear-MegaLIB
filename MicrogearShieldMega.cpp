@@ -108,11 +108,11 @@ Microgear::Microgear(){
   	Serial1.write(feeddata);
   	Serial1.write("\"\r");
 
-  	Serial.write("AT+MGWF=0,\"");
-  	Serial.write(appid);
-  	Serial.write("\",\"");
-  	Serial.write(feeddata);
-  	Serial.write("\"\r\n");
+  	// Serial.write("AT+MGWF=0,\"");
+  	// Serial.write(appid);
+  	// Serial.write("\",\"");
+  	// Serial.write(feeddata);
+  	// Serial.write("\"\r\n");
   	Serialmanual::clearserial();
   }
 //AT+MGWF=1,"MicrogearShield","{Temp:12}","fA78nqOtzasvAS1xg4MzlnfMn1FKHdUj"
